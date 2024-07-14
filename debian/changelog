@@ -1,5 +1,5 @@
-template-repository (1.0-1) unstable; urgency=medium
+golang-github-nadoo-ipset (0.5.0-1) unstable; urgency=medium
 
-  * Initial release
+  * Initial release 
 
- -- Tsic404 <liuheng@deepin.org>  Sat, 28 Jan 2023 13:46:49 +0800
+ -- Gui-Yue <yuemeng.gui@gmail.com>  Thu, 11 Jul 2024 15:23:27 +0800
