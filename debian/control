@@ -1,15 +1,97 @@
-Source: template-repository
-Section: unknown
+Source: golang-github-nadoo-ipset
+Section: golang
 Priority: optional
-Maintainer: Tsic404 <liuheng@deepin.org>
-Build-Depends: debhelper (>= 11)
-Standards-Version: 4.1.3
-Homepage: https://github.com/deepin-community/template-repository
-#Vcs-Browser: https://salsa.debian.org/debian/deepin-community-template-repository
-#Vcs-Git: https://salsa.debian.org/debian/deepin-community-template-repository.git
+Maintainer: Debian Go Packaging Team <team+pkg-go@tracker.debian.org>
+Uploaders: Gui-Yue <yuemeng.gui@gmail.com>
+Rules-Requires-Root: no
+Build-Depends: debhelper-compat (= 13),
+               dh-sequence-golang,
+               golang-any
+Testsuite: autopkgtest-pkg-go
+Standards-Version: 4.6.2
+Vcs-Browser: https://salsa.debian.org/go-team/packages/golang-github-nadoo-ipset
+Vcs-Git: https://salsa.debian.org/go-team/packages/golang-github-nadoo-ipset.git
+Homepage: https://github.com/nadoo/ipset
+XS-Go-Import-Path: github.com/nadoo/ipset
 
-Package: template-repository
-Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: <insert up to 60 chars description>
- <insert long description, indented with spaces>
+Package: golang-github-nadoo-ipset-dev
+Architecture: all
+Multi-Arch: foreign
+Depends: ${misc:Depends}
+Description: netlink ipset package for Go(Golang). (library)
+ ipset
+ .
+ Go Report Card (https://goreportcard.com/report/github.com/nadoo/ipset)
+ GitHub tag (https://github.com/nadoo/ipset/releases) PkgGoDev
+ (https://pkg.go.dev/github.com/nadoo/ipset) Go Version
+ (https://go.dev/dl/)
+ .
+ netlink ipset package for Go.
+ .
+ Usage
+ .
+ Your code:
+ .
+   package main
+ .
+   import (
+   	"log"
+ .
+   	"github.com/nadoo/ipset"
+   )
+ .
+   func main() {
+   	// must call Init first
+   	if err := ipset.Init(); err != nil {
+   		log.Printf("error in ipset Init: %s", err)
+   		return
+   	}
+ .
+   	// default is ipv4 without timeout
+   	ipset.Destroy("myset")
+   	ipset.Create("myset")
+   	ipset.Add("myset", "1.1.1.1")
+   	ipset.Add("myset", "2.2.2.0/24")
+ .
+   	// ipv6 and timeout example
+   	// ipset create myset6 hash:net family inet6 timeout 60
+   	ipset.Create("myset6", ipset.OptIPv6(), ipset.OptTimeout(60))
+   	ipset.Flush("myset6")
+ .
+   	ipset.Add("myset6", "2022::1", ipset.OptTimeout(10))
+   	ipset.Add("myset6", "2022::1/32")
+   }
+ .
+ Result:
+ .
+ ipset list myset
+ .
+   Name: myset
+   Type: hash:net
+   Revision: 1
+   Header: family inet hashsize 1024 maxelem 65536
+   Size in memory: 552
+   References: 0
+   Number of entries: 2
+   Members:
+   1.1.1.1
+   2.2.2.0/24
+ .
+ ipset list myset6
+ .
+   Name: myset6
+   Type: hash:net
+   Revision: 1
+   Header: family inet6 hashsize 1024 maxelem 65536 timeout 60
+   Size in memory: 1432
+   References: 0
+   Number of entries: 2
+   Members:
+   2022::1 timeout 9
+   2022::/32 timeout 59
+ .
+ Links
+ .
+  * glider (https://github.com/nadoo/glider): a forward proxy with ipset
+    management features powered by this package.
+
